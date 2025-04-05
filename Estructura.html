@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tareas Rápidas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Tareas Rápidas 📝</h1>
+
+    <div class="input-section">
+      <input type="text" id="task-input" placeholder="Escribe una tarea..." />
+      <button id="add-task">Agregar</button>
+    </div>
+
+    <div class="reminder-section">
+      <label for="reminder-check">
+        <input type="checkbox" id="reminder-check" />
+        ¿Deseas recordatorio?
+      </label>
+      <input type="datetime-local" id="reminder-date" />
+    </div>
+
+    <ul id="task-list">
+      <!-- Aquí se agregan las tareas dinámicamente -->
+    </ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
