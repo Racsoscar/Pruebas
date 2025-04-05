@@ -97,4 +97,21 @@ body {
     background-color: #dc3545;
     color: white;
   }
+  .edit-input {
+    padding: 6px 10px;
+    font-size: 14px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-right: 10px;
+  }
+  
+  .edit-date {
+    padding: 6px 10px;
+    font-size: 14px;
+    width: 35%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
   

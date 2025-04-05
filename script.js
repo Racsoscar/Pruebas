@@ -43,14 +43,66 @@ function createTask(taskText, isCompleted) {
   deleteBtn.textContent = "🗑";
   deleteBtn.classList.add("delete-btn");
 
+  // Evento completar
   completeBtn.addEventListener("click", () => {
     li.classList.toggle("completed");
     saveTasks();
   });
 
+  // Evento eliminar
   deleteBtn.addEventListener("click", () => {
     li.remove();
     saveTasks();
+  });
+
+  // 🆕 Doble clic para editar texto y fecha
+  li.addEventListener("dblclick", () => {
+    const originalText = li.firstChild.nodeValue.trim();
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = originalText;
+    input.classList.add("edit-input");
+
+    const dateInput = document.createElement("input");
+    dateInput.type = "datetime-local";
+    dateInput.classList.add("edit-date");
+    dateInput.style.marginLeft = "10px";
+
+    li.firstChild.remove();
+    li.insertBefore(input, buttonContainer);
+    li.insertBefore(dateInput, buttonContainer);
+    input.focus();
+
+    function saveEdit() {
+      const newText = input.value.trim();
+      const newDate = dateInput.value;
+
+      if (newText !== "") {
+        li.firstChild.remove();
+        li.insertBefore(document.createTextNode(newText), buttonContainer);
+        saveTasks();
+
+        // Reprogramar recordatorio si hay nueva fecha
+        if (newDate) {
+          const delay = new Date(newDate).getTime() - Date.now();
+          if (delay > 0) {
+            setTimeout(() => {
+              alert(`🔔 ¡Hora de cumplir la tarea: "${newText}"!`);
+            }, delay);
+          }
+        }
+      } else {
+        li.remove();
+        saveTasks();
+      }
+    }
+
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") saveEdit();
+    });
+
+    input.addEventListener("blur", saveEdit);
+    dateInput.addEventListener("blur", saveEdit);
   });
 
   buttonContainer.appendChild(completeBtn);
@@ -59,7 +111,7 @@ function createTask(taskText, isCompleted) {
   taskList.appendChild(li);
 }
 
-// Agregar nueva tarea desde el input
+// Agregar nueva tarea
 function addTask() {
   const taskText = taskInput.value.trim();
   const wantsReminder = document.getElementById("reminder-check").checked;
@@ -72,7 +124,7 @@ function addTask() {
 
   createTask(taskText, false);
 
-  // Recordatorio (opcional)
+  // Recordatorio nuevo
   if (wantsReminder && reminderDate) {
     const reminderTime = new Date(reminderDate).getTime();
     const now = new Date().getTime();
@@ -87,7 +139,6 @@ function addTask() {
     }
   }
 
-  // Limpiar campos
   taskInput.value = "";
   document.getElementById("reminder-check").checked = false;
   document.getElementById("reminder-date").value = "";
@@ -96,12 +147,12 @@ function addTask() {
   saveTasks();
 }
 
-// Habilitar campo de fecha si se marca recordatorio
+// Habilitar/deshabilitar input de fecha
 document.getElementById("reminder-check").addEventListener("change", function () {
   document.getElementById("reminder-date").disabled = !this.checked;
 });
 
-// Eventos para agregar tareas
+// Eventos
 addTaskBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
@@ -109,6 +160,7 @@ taskInput.addEventListener("keypress", function (e) {
   }
 });
 
-// Cargar tareas guardadas al abrir la app
+// Cargar tareas guardadas
 loadTasks();
+
 
